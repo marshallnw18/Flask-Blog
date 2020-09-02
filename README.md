@@ -1,7 +1,7 @@
 # Python Flask Blog Project
 
-# Introduction
+## Introduction
 
-# Continuous Integration
+## Continuous Integration
 
-# Continuous Deployment 
+## Continuous Deployment 

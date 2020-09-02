@@ -1,6 +1,7 @@
 FROM ubuntu:16.04
 
 LABEL Nick Marshall "marshallnw18@gmail.com"
+EXPOSE 5000/tcp
 
 # Setting Flask App env variable for use in the 'flask run' cmd
 ENV FLASK_APP /app/flaskblog.py
