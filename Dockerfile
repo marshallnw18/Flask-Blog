@@ -5,14 +5,8 @@ LABEL Nick Marshall "marshallnw18@gmail.com"
 # Setting Flask App env variable for use in the 'flask run' cmd
 ENV FLASK_APP /app/run.py
 
-# RUN apt-get update -y && \
-#    apt-get install -y python-pip python-dev
-
-# Copying local project files to the /app dir on Ubuntu
+# Copying local project files and requirements to the /app dir on the Alpine container 
 COPY . /app
-
-# Copying requirements.txt to Ubuntu for pip installation
-# COPY ./requirements.txt /app/requirements.txt
 
 WORKDIR /app
 
