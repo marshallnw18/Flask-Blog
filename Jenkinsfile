@@ -21,14 +21,8 @@ pipeline {
                 sshTransfer(
                 sourceFiles: "**",
                 remoteDirectory: "//opt//docker",
-                execCommand: "# Stop previous running container and remove it
-                                docker stop flask_container; 
-                                docker rm -f flask_container; 
-                                # Remove previous built image
-                                docker image rm -f flaskblog:v1; 
-                                cd /opt/docker; 
-                                # Build new image
-                                docker build -t flaskblog:v1 . "
+                execCommand: "docker stop flask_container", "docker rm -f flask_container", "docker image rm -f flaskblog:v1",
+                                "cd /opt/docker", "docker build -t flaskblog:v1 ."
                 )
                 ])
             ])
