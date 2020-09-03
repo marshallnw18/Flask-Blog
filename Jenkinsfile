@@ -10,23 +10,23 @@ pipeline {
 
             
             stage('SSH transfer') {
-            script {
-            sshPublisher(
-            continueOnError: false, failOnError: true,
-            publishers: [
-                sshPublisherDesc(
-                configName: "Docker Server",
-                verbose: true,
-                transfers: [
-                sshTransfer(
-                sourceFiles: "**",
-                remoteDirectory: "//opt//docker",
-                execCommand: "docker stop flask_container", "docker rm -f flask_container", "docker image rm -f flaskblog:v1",
-                                "cd /opt/docker", "docker build -t flaskblog:v1 ."
-                )
+                steps {
+                sshPublisher(
+                continueOnError: false, failOnError: true,
+                publishers: [
+                    sshPublisherDesc(
+                    configName: "Docker Server",
+                    verbose: true,
+                    transfers: [
+                    sshTransfer(
+                    sourceFiles: "**",
+                    remoteDirectory: "//opt//docker",
+                    execCommand: "docker stop flask_container", "docker rm -f flask_container", "docker image rm -f flaskblog:v1",
+                                    "cd /opt/docker", "docker build -t flaskblog:v1 ."
+                    )
+                    ])
                 ])
-            ])
-            }
+                }
             }
 
             stage('Testing') {
