@@ -8,16 +8,31 @@ pipeline {
                 }
             }
 
-            stage('Build Image') {
-                steps {
-                    sh 'sudo docker build -t flask-blog:v1 .'
-                }
+            
+            stage('SSH transfer') {
+            script {
+            sshPublisher(
+            continueOnError: false, failOnError: true,
+            publishers: [
+                sshPublisherDesc(
+                configName: "Docker Server",
+                verbose: true,
+                transfers: [
+                sshTransfer(
+                sourceFiles: "**",
+                remoteDirectory: "//opt//docker",
+                execCommand: "# Stop previous running container and remove it
+                                docker stop flask_container; 
+                                docker rm -f flask_container; 
+                                # Remove previous built image
+                                docker image rm -f flaskblog:v1; 
+                                cd /opt/docker; 
+                                # Build new image
+                                docker build -t flaskblog:v1 . "
+                )
+                ])
+            ])
             }
-
-            stage('Run Image') {
-                steps {
-                    sh 'sudo docker run -d -p 5000:5000 --name flaskblog flask-blog:v1'
-                }
             }
 
             stage('Testing') {
