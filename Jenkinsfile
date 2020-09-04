@@ -4,6 +4,7 @@ pipeline {
             stage('Clone repository') {
                 /* Cloning the repo to our workspace */
                 steps {
+                    echo 'Checking out source control...'
                     checkout scm
                 }
             }
@@ -11,10 +12,10 @@ pipeline {
             
             stage('SSH transfer') {
                 steps {
-                sshPublisher(
-                    publishers: [
-                        sshPublisherDesc(
-                            configName: 'Docker Server', 
+                    echo 'Transferring project files and building container image...'
+                    sshPublisher(
+                        publishers: [
+                            sshPublisherDesc(configName: 'Docker Server', 
                             transfers: [
                                 sshTransfer(
                                     cleanRemote: false, 
@@ -34,13 +35,28 @@ pipeline {
                                     patternSeparator: '[, ]+', 
                                     remoteDirectory: '//opt//docker', 
                                     remoteDirectorySDF: false, 
-                                    removePrefix: '', sourceFiles: '**')
+                                    removePrefix: '', 
+                                    sourceFiles: '**'), 
+                                sshTransfer(
+                                    cleanRemote: false, 
+                                    excludes: '', 
+                                    execCommand: '''# Run new container from new image
+                                    docker run -itd --name flask_container -p 8090:5000 flaskblog:v1''', 
+                                    execTimeout: 120000, 
+                                    flatten: false, 
+                                    akeEmptyDirs: false, 
+                                    noDefaultExcludes: false, 
+                                    patternSeparator: '[, ]+', 
+                                    remoteDirectory: '', 
+                                    remoteDirectorySDF: false, 
+                                    removePrefix: '', 
+                                    sourceFiles: '')
                                     ], 
-                            usePromotionTimestamp: false, 
-                            useWorkspaceInPromotion: false, 
-                            verbose: false)
-                    ])
-                }
+                                usePromotionTimestamp: false, 
+                                useWorkspaceInPromotion: false, 
+                                verbose: false)
+                        ])
+                    }
             }
 
             stage('Testing') {
