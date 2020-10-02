@@ -5,7 +5,7 @@ LABEL Nick Marshall "marshallnw18@gmail.com"
 # Setting Flask App env variable for use in the 'flask run' cmd
 ENV FLASK_APP /app/run.py
 
-# Copying local project files and requirements to the /app dir on the Alpine container 
+# Copying local project files and requirements.txt to the /app dir on the Alpine container 
 COPY . /app
 
 WORKDIR /app

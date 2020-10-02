@@ -9,14 +9,15 @@ pipeline {
                 }
             }
 
-            
-            stage('SSH transfer') {
+            /* Transferring project files to Docker Server */
+            stage('Project Files Transfer') {
                 steps {
                     echo 'Transferring project files and building container image...'
                     sshPublisher(
                         publishers: [
                             sshPublisherDesc(configName: 'Docker Server', 
                             transfers: [
+                            /* Building the application image */
                                 sshTransfer(
                                     cleanRemote: false, 
                                     excludes: '', 
@@ -37,6 +38,7 @@ pipeline {
                                     remoteDirectorySDF: false, 
                                     removePrefix: '', 
                                     sourceFiles: '**'), 
+                                /* Running the application container */
                                 sshTransfer(
                                     cleanRemote: false, 
                                     excludes: '', 
@@ -61,7 +63,7 @@ pipeline {
 
             stage('Testing') {
                 steps {
-                    echo 'Testing...'
+                    echo 'Flask Blog Deployment Complete!'
                 }
             }
         }
